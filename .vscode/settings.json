@@ -3,6 +3,8 @@
     "files.associations": {
         "*.ejs": "html",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "stack": "cpp",
+        "utility": "cpp"
     }
 }
