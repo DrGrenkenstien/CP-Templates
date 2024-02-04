@@ -34,3 +34,9 @@ class Z_Function{
         }
 
 };
+
+int main(){
+
+
+    
+}
