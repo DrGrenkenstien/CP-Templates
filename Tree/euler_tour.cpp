@@ -16,12 +16,12 @@ class EluerTour{
             start.resize(n + 1);
             end.resize(n + 1);
             property.resize(n + 1);
-            euler_tour.resize(n + 1);
+            euler_tour;
         }
 
         void Euler_tour(int at = 0, int prev = -1) {
             start[at] = timer;
-            euler_tour[timer++] = at;
+            euler_tour.push_back(at);
             for (int n : tree[at]) {
                 if (n != prev) { Euler_tour(n, at); }
             }
