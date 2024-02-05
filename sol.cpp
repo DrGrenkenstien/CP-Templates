@@ -17,17 +17,18 @@ class EluerTour{
             this->tree = tree;
             start.resize(n + 1);
             end.resize(n + 1);
-            property.resize(n + 1);
-            euler_tour.resize(n + 1);
+            // property.resize(n + 1);
+            // euler_tour.resize(n + 1);
             propval = val;
         }
 
-        void Euler_tour(int at = 0, int prev = -1) {
+        void Euler_tour(int at = 0, int prev = -1, int depth = 0) {
             start[at] = timer;
-            property[timer] = propval[at];
-            euler_tour[timer++] = at;
+            property.push_back(depth);
+            euler_tour.push_back(at);
             for (int n : tree[at]) {
-                if (n != prev) { Euler_tour(n, at); }
+                if (n != prev) { Euler_tour(n, at, depth + 1), euler_tour.push_back(at); }
+
             }
             end[at] = timer;
         }
@@ -79,7 +80,7 @@ class SegmentTree{
                 // Recurse on the right child
                 build(2*node+1, mid+1, end);
                 // Internal node will have the sum of both of its children
-                segTree[node] = segTree[2*node] + segTree[2*node+1];
+                segTree[node] = min(segTree[2*node], segTree[2*node+1]);
             }
         }
 
@@ -105,7 +106,7 @@ class SegmentTree{
                     update(2*node+1, mid+1, end, idx, val);
                 }
                 // Internal node will have the sum of both of its children
-                segTree[node] = segTree[2*node] + segTree[2*node+1];
+                segTree[node] = min(segTree[2*node], segTree[2*node+1]);
             }
         }
 
@@ -125,7 +126,7 @@ class SegmentTree{
             int mid = (start + end) / 2;
             li p1 = query(2*node, start, mid, l, r);
             li p2 = query(2*node+1, mid+1, end, l, r);
-            return (p1 + p2);
+            return min(p1, p2);
         }
 
 };
@@ -160,28 +161,37 @@ int main(){
     
     // for(auto e : prop)cout<<e<<" prop ";
 
-    SegmentTree ST = SegmentTree(n, prop);
+    int sz = prop.size();
 
-    ST.build(1, 0, n);
+    SegmentTree ST = SegmentTree(sz, prop);
+
+    ST.build(1, 0, sz);
 
     while(q--){
 
-        int t;
-        cin>>t;
+        int a, b;
+        cin>>a>>b;
 
-        if(t == 1){
-            int s, x;
-            cin>>s>>x;
+       
+        if (start[a] > start[b]) swap(a, b);
+            // return query(tin[a], tin[b]);
 
-            ST.update(1, 0, n, start[s], x);
-            // cout<<ST.query(1, 0, n, start[s], start[s])<<" querying updated index \n";
-        }
-        else{
-            int s;
-            cin>>s;
 
-            cout<<ST.query(1, 0, n, start[s], end[s] - 1)<<"\n";
-        }
+        cout<<ST.query(1, 0, sz, start[a], start[b])<<"\n";
+
+        // if(t == 1){
+        //     int s, x;
+        //     cin>>s>>x;
+
+        //     ST.update(1, 0, n, start[s], x);
+        //     // cout<<ST.query(1, 0, n, start[s], start[s])<<" querying updated index \n";
+        // }
+        // else{
+        //     int s;
+        //     cin>>s;
+
+        //     cout<<ST.query(1, 0, n, start[s], end[s] - 1)<<"\n";
+        // }
 
     }
 
