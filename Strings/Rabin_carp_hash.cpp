@@ -6,60 +6,36 @@ using namespace std;
 
 typedef long long int li;
 
-li mod = 1000000007;
+class HashedString {
+  private:
+	// change M and B if you want
+	static const long long M = 1e9 + 9;
+	static const long long B = 9973;
 
-li power(li x, li n){
-    li res = 1;
-    
-    while(n){
-        if(n & 1)
-            res = (res * x) % mod;
-        n >>= 1;
-        x = (x * x) % mod;
-    }
-    return res;
-}
+	// pow[i] contains B^i % M
+	static vector<long long> pow;
+
+	// p_hash[i] is the hash of the first i characters of the given string
+	vector<long long> p_hash;
+
+  public:
+	HashedString(const string &s) : p_hash(s.size() + 1) {
+		while (pow.size() < s.size()) { pow.push_back((pow.back() * B) % M); }
+
+		p_hash[0] = 0;
+		for (int i = 0; i < s.size(); i++) {
+			p_hash[i + 1] = ((p_hash[i] * B) % M + s[i]) % M;
+		}
+	}
+
+	long long get_hash(int start, int end) {
+		long long raw_val =
+		    (p_hash[end + 1] - (p_hash[start] * pow[end - start + 1]));
+		return (raw_val % M + M) % M;
+	}
+};
 
 int main() {
-    
-    string s;
-    cin>>s;
-    
-    li p = 31;
-    
-    int n = s.length();
-    
-    vector<li> hash(n), primes(n);
-    primes[0] = 1; //the culprit
-    
-    for(int i = 1; i < n ; i++){
-        primes[i] = (primes[i - 1] * p) % mod;
-    }
-    
-    for(int i = 0; i < n; i++){
-        if(!i){
-            hash[i] = (s[i] - 'a' + 1);
-        }
-        else{
-            hash[i] = (hash[i - 1] + ((s[i] - 'a' + 1) * primes[i]) % mod) % mod;
-        }
-    }
-    
-    for(int len = 1; len < n; len++){
-        for(int i = 0; i + len < n; i++){
-            int start = i, end = i + len - 1;
-            
-            li h = hash[end];
-            
-            if(start > 0)
-                h = (h - hash[start - 1] + mod) % mod;
-            
-            
-            h = (h * primes[n - start - 1]) % mod; //correct equation,
-            
-            cout<<h<<" hash for "<<s.substr(i, len)<<" \n ";
-        }
-    }
     
 	return 0;
 }

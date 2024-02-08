@@ -5,6 +5,8 @@
         "string": "cpp",
         "vector": "cpp",
         "stack": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp"
     }
 }
