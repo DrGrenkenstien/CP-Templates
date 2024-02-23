@@ -2,118 +2,40 @@
 
 using namespace std;
 
-int findDthElement(const std::set<int>& mySet, int d) {
-    auto it = mySet.begin();
-    int count = 1;
-    
-    while(count < d && it != mySet.end()){
-        count++;
-        it++;
-    }
+typedef long long int li;
 
-    return *it; // Return the value at the dth position
-}
+li inf = 1e18;
 
 int main() {
 	ios_base::sync_with_stdio(0);
 	cin.tie(0);
 
-    int t;
-    cin>>t;
-    while (t--)
-    {
-        int n, m, k;
-        cin>>n>>m>>k;
+    int n;
+	cin>>n;
 
-        vector<int>  a(n), b(m);
+	vector<int> a(n), b(n), x(n);
 
-        set<int> ar, br;
-        vector<int> new_a(k + 1), new_b(k + 1);
+	for(int i = 0; i < n; i++){
+		cin>>a[i]>>b[i]>>x[i];
+	}
 
-        for(auto &e : a){
-            cin>>e;
-            if(e >= 1 && e <= k)ar.insert(e);
-        }
+	vector<int> par(n + 1, -1);
 
-        for(auto &e : b){
-            cin>>e;
-            if(e >= 1 && e <= k)br.insert(e);
-        }
-        
-        if(ar.size() < k/2 || br.size() < k/2){
-            cout<<"NO\n";
-            continue;
-        }
-        
-        vector<int> new_a(k + 1), new_b(k + 1);
-        
-        for(auto itr = ar.begin(); itr != ar.end(); itr++){
-            new_a[*itr] = 1;
-        }
-        for(auto itr = br.begin(); itr != br.end(); itr++){
-            new_b[*itr] = 1;
-        }
-        
-        int cnt_a = 0, cnt_b = 0;
+	for(int i = 1; i < n; i++){
+		par[x[i - 1]] = i;
+	}
 
-        vector<bool> vis(k + 1, false);
+	vector<li> dp(n + 2, inf);
 
-        for(int i = 1; i <= k; i++){
-            if(new_a[i] && !new_b[i]){
-                vis[i] = true;
-                cnt_a++;
-            }
-        }
+	dp[1] = 0;
 
-        for(int i = 1; i <= k; i++){
-            if(!new_a[i] && new_b[i]){
-                vis[i] = true;
-                cnt_b++;
-            }
-        }
-        
-        if(cnt_a + cnt_b == k){
-            cout<<"YES\n";
-            continue;
-        }
+	for(int i = 1; i < n; i++){
+		dp[i] += a[i - 1];
+		dp[i + 1] = dp[i];
+	}
 
-        int index = 1;
-        while(cnt_a < k/2 && index <= k){
-            if(!vis[index]){
-                cnt_a++;
-                vis[index] = true;
-            }
-            index++;
-        }
 
-        if(cnt_a < k/2){
-            cout<<"NO\n";
-            continue;
-        } 
-
-        index = 1;
-        while(cnt_b < k/2 && index <= k){
-            if(!vis[index]){
-                cnt_b++;
-                vis[index] = true;
-            }
-            index++;
-        }
-
-        if(cnt_b < k/2){
-            cout<<"NO\n";
-            continue;
-        }
-
-        if(cnt_a + cnt_b == k){
-            cout<<"YES\n";
-            continue;
-        }
-        else{
-            cout<<"NO\n";
-        }
-    }
-    
+	cout<<min(dp[n][1], dp[n][0]);
 
 	return 0;
 }
