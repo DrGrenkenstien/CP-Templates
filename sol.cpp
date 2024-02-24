@@ -2,40 +2,208 @@
 
 using namespace std;
 
-typedef long long int li;
+class HLD{
 
-li inf = 1e18;
+    vector<int> parent, depth, heavy, head, pos;
+    int cur_pos, N;
+	int tree_size;
+    vector<int> arr;
+	vector<unordered_map<int, bool> > segTree;
 
-int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
+    public:
+        HLD(vector<vector<int>> const& adj, int n, vector<int> &a){
 
-    int n;
-	cin>>n;
+			N = n;
+            parent = vector<int>(n + 1);
+            depth = vector<int>(n + 1);
+            heavy = vector<int>(n + 1, -1);
+            head = vector<int>(n + 1);
+            pos = vector<int>(n + 1);
+            cur_pos = 0;
+			tree_size = 4*n;
+            segTree.resize(tree_size);
+			arr = a;
 
-	vector<int> a(n), b(n), x(n);
+            dfs(1, adj);
+            decompose(1, 1, adj);
+            // cout<<"curr pos : "<<cur_pos<<"\n";
+        }
 
-	for(int i = 0; i < n; i++){
-		cin>>a[i]>>b[i]>>x[i];
+		auto position(int node){
+			return pos[node];
+		}
+
+		void build(int node, int start, int end)
+        {
+            if(start == end)
+            {
+                // Leaf node will have a single element
+				unordered_map<int, bool> mp;
+				mp[arr[start]] = true;
+                segTree[node] = mp;
+            }
+            else
+            {
+                int mid = (start + end) / 2;
+                // Recurse on the left child
+                build(2*node, start, mid);
+                // Recurse on the right child
+                build(2*node+1, mid+1, end);
+                // Internal node will have the sum of both of its children
+
+				auto left = segTree[2*node];
+				auto right = segTree[2*node + 1];
+
+				if(left.size() < right.size())swap(left, right);
+
+				for(auto itr = right.begin(); itr != right.end(); itr++){
+					left[itr->first] = true;
+				}
+
+                segTree[node] = left;
+            }
+        }
+
+		void update(int node, int start, int end, int idx, int val)
+        {
+            if(start == end)
+            {
+                // Leaf node will have a single element
+				unordered_map<int, bool> mp;
+				mp[val] = true;
+                segTree[node] = mp;
+            }
+            else
+            {
+                int mid = (start + end) / 2;
+                if(start <= idx and idx <= mid)
+                {
+                    // If idx is in the left child, recurse on the left child
+                    update(2*node, start, mid, idx, val);
+                }
+                else
+                {
+                    // if idx is in the right child, recurse on the right child
+                    update(2*node+1, mid+1, end, idx, val);
+                }
+                // Internal node will have the sum of both of its children
+				auto left = segTree[2*node];
+				auto right = segTree[2*node + 1];
+
+				if(left.size() < right.size())swap(left, right);
+
+				for(auto itr = right.begin(); itr != right.end(); itr++){
+					left[itr->first] = true;
+				}
+
+                segTree[node] = left;
+            }
+        }
+
+		bool query(int node, int start, int end, int l, int r, int val)
+        {
+            if(r < start or end < l)
+            {
+                // range represented by a node is completely outside the given range
+                return 0;
+            }
+            if(l <= start and end <= r)
+            {
+                // range represented by a node is completely inside the given range
+                return segTree[node][val];
+            }
+            // range represented by a node is partially inside and partially outside the given range
+            int mid = (start + end) / 2;
+            bool p1 = query(2*node, start, mid, l, r, val);
+            bool p2 = query(2*node+1, mid+1, end, l, r, val);
+            return (p1 | p2);
+        }
+
+        int dfs(int v, vector<vector<int>> const& adj) {
+            int size = 1;
+            int max_c_size = 0;
+            for (int c : adj[v]) {
+                if (c != parent[v]) {
+                    parent[c] = v, depth[c] = depth[v] + 1;
+                    int c_size = dfs(c, adj);
+                    size += c_size;
+                    if (c_size > max_c_size)
+                        max_c_size = c_size, heavy[v] = c;
+                }
+            }
+            return size;
+        }
+
+        void decompose(int v, int h, vector<vector<int>> const& adj) {
+            head[v] = h, pos[v] = cur_pos++;
+            if (heavy[v] != -1)
+                decompose(heavy[v], h, adj);
+            for (int c : adj[v]) {
+                if (c != parent[v] && c != heavy[v])
+                    decompose(c, c, adj);
+            }
+        }
+
+        bool sol_query(int a, int b, int val) {
+            bool res = false;
+            for (; head[a] != head[b]; b = parent[head[b]]) {
+                if (depth[head[a]] > depth[head[b]])
+                    swap(a, b);
+                bool cur_heavy_path_max = query(1, 0, cur_pos - 1, pos[head[b]], pos[b], val);
+                res |= cur_heavy_path_max;
+				if(res)return true;
+            }
+            if (depth[a] > depth[b])
+                swap(a, b);
+            bool last_heavy_path_max = query(1, 0, cur_pos - 1, pos[a], pos[b], val);
+            res |= last_heavy_path_max;
+            return res;
+        }
+
+};
+
+int main(){
+	
+
+  
+	// For getting input from input.txt file 
+	freopen("milkvisits.in", "r", stdin); 
+
+	// Printing the Output to output.txt file 
+	freopen("milkvisits.out", "w", stdout); 
+  
+
+
+    int n, m;
+	cin>>n>>m;
+
+	vector<int> a(n);
+
+	for(auto &e : a)cin>>e;
+
+	vector<vector<int> > graph(n + 1);
+
+	for(int i = 0; i < n - 1; i++){
+		int u, v;
+		cin>>u>>v;
+
+		graph[u].push_back(v);
+		graph[v].push_back(u);
 	}
 
-	vector<int> par(n + 1, -1);
+	HLD sol = HLD(graph, n, a);
 
-	for(int i = 1; i < n; i++){
-		par[x[i - 1]] = i;
+	for(int i = 1; i <= n; i++){
+		sol.update(1, 0, n - 1, sol.position(i), a[i - 1]);
 	}
 
-	vector<li> dp(n + 2, inf);
+	while(m--){
 
-	dp[1] = 0;
+		int u, v, c;
+		cin>>u>>v>>c;
 
-	for(int i = 1; i < n; i++){
-		dp[i] += a[i - 1];
-		dp[i + 1] = dp[i];
+		cout<<sol.sol_query(u, v, c);
+
 	}
 
-
-	cout<<min(dp[n][1], dp[n][0]);
-
-	return 0;
 }

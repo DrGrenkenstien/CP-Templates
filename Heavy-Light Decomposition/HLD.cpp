@@ -11,15 +11,15 @@ class HLD{
         HLD(vector<vector<int>> const& adj){
 
             int n = adj.size();
-            parent = vector<int>(n);
-            depth = vector<int>(n);
-            heavy = vector<int>(n, -1);
-            head = vector<int>(n);
-            pos = vector<int>(n);
+            parent = vector<int>(n + 1);
+            depth = vector<int>(n + 1);
+            heavy = vector<int>(n + 1, -1);
+            head = vector<int>(n + 1);
+            pos = vector<int>(n + 1);
             cur_pos = 0;
 
-            dfs(0, adj);
-            decompose(0, 0, adj);
+            dfs(1, adj);
+            decompose(1, 1, adj);
         }
 
         int dfs(int v, vector<vector<int>> const& adj) {

@@ -8,6 +8,7 @@
         "utility": "cpp",
         "xstring": "cpp",
         "xtree": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "xhash": "cpp"
     }
 }
