@@ -8,7 +8,7 @@ class HLD{
     int cur_pos, N;
 	int tree_size;
     vector<int> arr;
-	vector<unordered_map<int, bool> > segTree;
+	vector<set<int> > segTree;
 
     public:
         HLD(vector<vector<int>> const& adj, int n, vector<int> &a){
@@ -38,9 +38,7 @@ class HLD{
             if(start == end)
             {
                 // Leaf node will have a single element
-				unordered_map<int, bool> mp;
-				mp[arr[start]] = true;
-                segTree[node] = mp;
+                segTree[node].insert(arr[start]);
             }
             else
             {
@@ -57,7 +55,7 @@ class HLD{
 				if(left.size() < right.size())swap(left, right);
 
 				for(auto itr = right.begin(); itr != right.end(); itr++){
-					left[itr->first] = true;
+					left.insert(*itr);
 				}
 
                 segTree[node] = left;
@@ -69,9 +67,7 @@ class HLD{
             if(start == end)
             {
                 // Leaf node will have a single element
-				unordered_map<int, bool> mp;
-				mp[val] = true;
-                segTree[node] = mp;
+                segTree[node].insert(val);
             }
             else
             {
@@ -90,13 +86,17 @@ class HLD{
 				auto left = segTree[2*node];
 				auto right = segTree[2*node + 1];
 
-				if(left.size() < right.size())swap(left, right);
+				if(segTree[node].size() < right.size())swap(segTree[node], right);
 
 				for(auto itr = right.begin(); itr != right.end(); itr++){
-					left[itr->first] = true;
+					segTree[node].insert(*itr);
 				}
 
-                segTree[node] = left;
+                if(segTree[node].size() < left.size())swap(segTree[node], left);
+
+                for(auto itr = left.begin(); itr != left.end(); itr++){
+					segTree[node].insert(*itr);
+				}
             }
         }
 
@@ -110,7 +110,8 @@ class HLD{
             if(l <= start and end <= r)
             {
                 // range represented by a node is completely inside the given range
-                return segTree[node][val];
+                if(segTree[node].find(val)!=segTree[node].end())return true;
+                return false;
             }
             // range represented by a node is partially inside and partially outside the given range
             int mid = (start + end) / 2;

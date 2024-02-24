@@ -9,6 +9,18 @@
         "xstring": "cpp",
         "xtree": "cpp",
         "algorithm": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "map": "cpp",
+        "unordered_map": "cpp",
+        "array": "cpp",
+        "chrono": "cpp",
+        "deque": "cpp",
+        "format": "cpp",
+        "forward_list": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp",
+        "xutility": "cpp"
     }
 }
