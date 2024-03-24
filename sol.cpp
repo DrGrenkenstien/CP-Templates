@@ -2,93 +2,84 @@
 
 using namespace std;
 
-struct Query {
-	int l, r, idx;
-};
+int block_size;
 
-class Mo{
+void solve(int indx, vector<int> &cnt, vector<int> &next, vector<int> &p){
 
-    int block_size;
-    int different_values = 0, q;
-    int mo_left = -1;
-	int mo_right = -1;
-    vector<int> ans, arr;
-    vector<Query> query;
-    multiset<int> val;
+    int block = indx/block_size;
+    cout<<block<<" for "<<indx<<"\n";
+    int n = p.size();
 
-    public:
+    int l = block * block_size;
+    int r = min((block + 1) * block_size - 1, n - 1);
 
-        Mo(int n, vector<Query> &queries, vector<int> &a){
-            query = queries;
-            arr = a;
-            q = queries.size();
-            block_size = (int)sqrt(n);
-            sort(queries.begin(), queries.end(), mo_cmp);
-            ans.resize(queries.size());
-        }
+    int steps = 0, curr = indx;
 
-        bool mo_cmp(Query a, Query b) {
-            int block_a = a.l / block_size;
-            int block_b = b.l / block_size;
-            if (block_a == block_b) { return a.r < b.r; }
-            return block_a < block_b;
-        };
+    for (int i = r; i >= l; i--){
+        if (i+p[i] >= r){ cnt[i] = 1, next[i] = i; }
+        else { cnt[i] = cnt[i+p[i]]+1, next[i] = next[i+p[i]]; }
+    }
+}
 
-        void remove(int idx) {
-            val.erase(val.find(arr[idx]));
-        };
-        void add(int idx) {
-           val.insert(arr[idx]);
-        };
+int get_ans(int indx, vector<int> &cnt, vector<int> &next){
 
-        void process_queries(){
-            
-            for (int i = 0; i < q; i++) {
-                int left = query[i].l;
-                int right = query[i].r;
+    int ans = 0;
 
-                while (mo_left < left) { remove(mo_left++); }
-                while (mo_left > left) { add(--mo_left); }
-                while (mo_right < right) { add(++mo_right); }
-                while (mo_right > right) { remove(mo_right--); }
+    int block = indx/block_size;
+    int n = cnt.size();
+    int r = min((block + 1) * block_size - 1, n - 1);
 
-                ans[query[i].idx] = val.size();
-            }
+    while(next[indx] != -1){
 
-        }
-
-        vector<int> get_answered_queries(){
-            return ans;
-        }
-
-};
+        ans += cnt[indx];
+        indx = next[indx];
+    }
+    return ans;
+}
 
 int main(){
 
-    int n, q;
-    cin>>n;
+    int n, m;
+    cin>>n>>m;
+
+    vector<int> p(n), cnt(n), next(n, -1);
+
+    block_size = (int)sqrt(n);
+    cout<<block_size<<"block size\n";
+
+    for(auto &e : p)cin>>e, cout<<e<<" input ";
     
-    vector<int> a(n);
+    for(int i = 0; i < n/block_size; i++)solve(i, cnt, next, p);
+    
+    while(m--){
 
-    for(auto &e : a)cin>>e;
+        int t, a, b;
+        cin>>t;
+        
+        if(!t){
+            cin>>a>>b;
+            a--;
+            p[a] = b;
+            solve(a, cnt, next, p);
+        }
+        else{
+            cin>>a;
+            a--;
 
-    cin>>q;
+            int index = a, ans = 0;
+            cout<<a<<" initial a\n";
+            while (a < n){
+                cout<<a<<" current a ";
+                ans += cnt[a];
+                a = next[a];
+                index = a;
+                a += p[a];
+            } 
 
-    vector<Query> que(q);
+            // int ans = get_ans(a, cnt, next);
+            cout<<ans<<"\n";
+        }
 
-    for(int i = 0; i < q; i++){
-        int x, y;
-		cin >> x >> y;
-		que.push_back({--x, --y, i});
     }
-
-
-    Mo solver = Mo(n, que, a);
-
-    solver.process_queries();
-
-    auto ans = solver.get_answered_queries();
-
-    for(auto e : ans)cout<<e<<"\n";
 
 }
