@@ -16,6 +16,14 @@ class SOS{
             dp.resize(MAXN + 1);
         }
 
+        void Set(int i, int val){
+            dp[i] = val;
+        }
+        
+        void Inc(int i, int val){
+            dp[i] += val;
+        }
+
         void forward1(){	// adding element to all its super set
             for(int bit = 0; bit < MLOG; bit++){
                 for(int i = 0; i < MAXN; i++){
