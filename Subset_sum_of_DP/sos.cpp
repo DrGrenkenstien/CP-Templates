@@ -23,6 +23,10 @@ class SOS{
         void Inc(int i, int val){
             dp[i] += val;
         }
+        
+        li get(int i){
+            return dp[i];
+        }
 
         void forward1(){	// adding element to all its super set
             for(int bit = 0; bit < MLOG; bit++){
