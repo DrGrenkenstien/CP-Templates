@@ -5,7 +5,7 @@ using namespace std;
 vector<int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
 
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq; //greater changes the default behaviour
         vector<int> distTo(V, INT_MAX);
 
         // Source initialised with dist=0.

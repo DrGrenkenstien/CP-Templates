@@ -1,0 +1,142 @@
+<templateSet group="CP_Templates">
+
+  <!-- Competitive Programming Template -->
+  <template name="CP" value="#include &lt;bits/stdc++.h&gt;&#10;&#10;using namespace std;&#10;&#10;int main(){&#10;    #ifndef ONLINE_JUDGE&#10;        freopen(&quot;./input.txt&quot;, &quot;r&quot;, stdin);&#10;        freopen(&quot;./output.txt&quot;, &quot;w&quot;, stdout);&#10;    #endif&#10;    $END$&#10;}" description="Competitive Programming template with freopen" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Indexed For Loop -->
+  <template name="fori" value="for(int $VAR$ = 0; $VAR$ &lt; $LIMIT$; $VAR$++){&#10;    $END$&#10;}" description="Indexed for loop (0 to n)" toReformat="false" toShortenFQNames="true">
+    <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true" />
+    <variable name="LIMIT" expression="" defaultValue="&quot;n&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Reverse For Loop -->
+  <template name="forr" value="for(int $VAR$ = $START$ - 1; $VAR$ &gt;= 0; $VAR$--){&#10;    $END$&#10;}" description="Reverse for loop (n-1 to 0)" toReformat="false" toShortenFQNames="true">
+    <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true" />
+    <variable name="START" expression="" defaultValue="&quot;n&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Range-based For Loop -->
+  <template name="fore" value="for(auto&amp; $VAR$ : $CONTAINER$){&#10;    $END$&#10;}" description="Range-based for loop" toReformat="false" toShortenFQNames="true">
+    <variable name="VAR" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true" />
+    <variable name="CONTAINER" expression="" defaultValue="&quot;v&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- While Loop -->
+  <template name="wh" value="while($COND$){&#10;    $END$&#10;}" description="While loop" toReformat="false" toShortenFQNames="true">
+    <variable name="COND" expression="" defaultValue="&quot;true&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- If-Else -->
+  <template name="ife" value="if($COND$){&#10;    $END$&#10;} else {&#10;    &#10;}" description="If-else block" toReformat="false" toShortenFQNames="true">
+    <variable name="COND" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Cout -->
+  <template name="cout" value="cout &lt;&lt; $EXPR$ &lt;&lt; endl;" description="cout with endl" toReformat="false" toShortenFQNames="true">
+    <variable name="EXPR" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Cin -->
+  <template name="cin" value="cin &gt;&gt; $VAR$;" description="cin input" toReformat="false" toShortenFQNames="true">
+    <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Vector Declaration -->
+  <template name="vec" value="vector&lt;$TYPE$&gt; $NAME$($SIZE$);" description="Vector declaration with size" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="NAME" expression="" defaultValue="&quot;v&quot;" alwaysStopAt="true" />
+    <variable name="SIZE" expression="" defaultValue="&quot;n&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Sort -->
+  <template name="sor" value="sort($CONTAINER$.begin(), $CONTAINER$.end());" description="Sort container" toReformat="false" toShortenFQNames="true">
+    <variable name="CONTAINER" expression="" defaultValue="&quot;v&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Push Back -->
+  <template name="pb" value="$CONTAINER$.push_back($VAL$);" description="push_back" toReformat="false" toShortenFQNames="true">
+    <variable name="CONTAINER" expression="" defaultValue="&quot;v&quot;" alwaysStopAt="true" />
+    <variable name="VAL" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Make Pair -->
+  <template name="mp" value="make_pair($FIRST$, $SECOND$)" description="make_pair" toReformat="false" toShortenFQNames="true">
+    <variable name="FIRST" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="SECOND" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Map Declaration -->
+  <template name="mmap" value="map&lt;$KEY$, $VAL$&gt; $NAME$;" description="Map declaration" toReformat="false" toShortenFQNames="true">
+    <variable name="KEY" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="VAL" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="NAME" expression="" defaultValue="&quot;mp&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Set Declaration -->
+  <template name="sset" value="set&lt;$TYPE$&gt; $NAME$;" description="Set declaration" toReformat="false" toShortenFQNames="true">
+    <variable name="TYPE" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="NAME" expression="" defaultValue="&quot;s&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Pair Declaration -->
+  <template name="pr" value="pair&lt;$FIRST$, $SECOND$&gt; $NAME$;" description="Pair declaration" toReformat="false" toShortenFQNames="true">
+    <variable name="FIRST" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="SECOND" expression="" defaultValue="&quot;int&quot;" alwaysStopAt="true" />
+    <variable name="NAME" expression="" defaultValue="&quot;p&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+  <!-- Debug Print -->
+  <template name="dbg" value="cerr &lt;&lt; &quot;$VAR$ = &quot; &lt;&lt; $VAR$ &lt;&lt; endl;" description="Debug print to cerr" toReformat="false" toShortenFQNames="true">
+    <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="cpp" value="true" />
+    </context>
+  </template>
+
+</templateSet>

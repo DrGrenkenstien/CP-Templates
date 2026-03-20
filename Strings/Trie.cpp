@@ -1,57 +1,55 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-class TrieNode{
-    public:
-    bool isend = false;
-    TrieNode* children[26] = {nullptr};
+class TrieNode {
+public:
+    bool isEnd = false;
+    array<unique_ptr<TrieNode>, 26> children{};
 };
 
 class Trie {
-    TrieNode* root;
+    unique_ptr<TrieNode> root;
 
-    public:
-        Trie() {
-        this->root = new TrieNode();
+public:
+    Trie() {
+        root = make_unique<TrieNode>();
     }
 
-    void insert(string word) {
+    void insert(const string& word) {
+        TrieNode* node = root.get();  // non-owning raw pointer
 
-        TrieNode *node = root;
+        for (char c : word) {
+            int idx = c - 'a';
 
-        for(char c: word){
+            if (!node->children[idx]) {
+                node->children[idx] = make_unique<TrieNode>();
+            }
 
-            if(!node->children[c - 'a'])
-                node->children[c - 'a'] = new TrieNode();
-
-            node = node->children[c - 'a'];
-
+            node = node->children[idx].get();
         }
 
-        node->isend = true;
-
+        node->isEnd = true;
     }
 
-    bool search(string word) {
+    bool search(const string& word) const {
+        TrieNode* node = root.get();
 
-        TrieNode *node = root;
+        for (char c : word) {
+            int idx = c - 'a';
 
-        for(char c : word){
-
-            if(!node->children[c - 'a'])
+            if (!node->children[idx])
                 return false;
-            node = node->children[c - 'a'];
 
+            node = node->children[idx].get();
         }
 
-        return node->isend;
-
+        return node->isEnd;
     }
 };
 
-int main(){
-    return 0;
+int main() {
+    Trie t;
+    t.insert("apple");
+    cout << t.search("apple") << endl;   // 1
+    cout << t.search("app") << endl;     // 0
 }
-    
-
